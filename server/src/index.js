@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 
 const connectDB = require('./config/db');
-const elementRoutes = require('./routes/element.routes');
+const usersRoutes = require('./routes/users.routes');
 
 require('dotenv').config();
 //puerto traido de archivo .env
@@ -17,7 +17,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use('/api/element', elementRoutes);
+app.use('/api/users', usersRoutes);
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);

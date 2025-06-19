@@ -26,7 +26,9 @@ export const GlobalStyles = createGlobalStyle`
     body{
         font-family: sans-serif;
         margin: 0;
-        background-color: #333;
+        background-color: black;
+        color: wheat;
+        padding: 0.9375rem;
     }
 
 `;
