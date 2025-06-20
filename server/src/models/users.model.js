@@ -5,13 +5,13 @@ const userSchema = new mongoose.Schema(
   {
     //required: para valores obligatorios
     //type: String, Number, Boolean, Arrays...
-    firstValue: { type: String, required: true },
-    secondValue: String
+    name: { type: String, required: true },
+    email: { type: String, required: true }
   },
   {
     //genera createAt y UpdateAt automático
     timestamps: true,
-    collection: 'mongodbCollectionName'
+    collection: 'usersCollection'
   }
 );
 

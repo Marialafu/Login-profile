@@ -9,13 +9,8 @@ const Login = () => {
 	const navigate = useNavigate();
 	return (
 		<>
-			<h1>LOGIN</h1>
-			<form onSubmit={event => handleSubmit(event, setError, navigate)}>
-				<div>
-					<label>NAME</label>
-					<input name='name' type='text' />
-					{error && <span>{error}</span>}
-				</div>
+			<h2>LOGIN</h2>
+			<form onSubmit={event => sendForm(event, setError, navigate)}>
 				<div>
 					<label>EMAIL</label>
 					<input name='email' type='text' />
@@ -24,11 +19,11 @@ const Login = () => {
 				<div>
 					<label>PASSWORD</label>
 					<input name='password' type={showPassword ? 'text' : 'password'} />
-					<button onClick={() => setShowPassword(!showPassword)}>
+					<button type='button' onClick={() => setShowPassword(!showPassword)}>
 						show password
 					</button>
 				</div>
-				<button type='submit'>LOGIN</button>
+				<input type='submit' value='login'></input>
 			</form>
 			<span>
 				¿No tienes cuenta? <Link to={'/register'}>Regístrate</Link>
@@ -37,7 +32,7 @@ const Login = () => {
 	);
 };
 
-const handleSubmit = async (event, setError, navigate) => {
+const sendForm = async (event, setError, navigate) => {
 	event.preventDefault();
 	const form = event.target;
 	const email = form.email.value;
