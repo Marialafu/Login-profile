@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/config/firebase.config';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Register = () => {
+	const { setFormValues } = useContext(AuthContext);
+
 	const [error, setError] = useState(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
+
 	return (
 		<>
 			<h2>REGISTER</h2>
-			<form onSubmit={event => sendForm(event, navigate, setError)}>
+			<form
+				onSubmit={event => sendForm(event, navigate, setError, setFormValues)}
+			>
 				<div>
 					<label>NAME</label>
 					<input name='name' type='text' />
@@ -36,11 +42,14 @@ const Register = () => {
 	);
 };
 
-const sendForm = async (event, navigate, setError) => {
+const sendForm = async (event, navigate, setError, setFormValues) => {
 	event.preventDefault();
 	const formData = event.target;
 	const email = formData.email.value;
 	const password = formData.password.value;
+	const name = formData.name.value;
+
+	setFormValues(email, name);
 
 	try {
 		await createUserWithEmailAndPassword(auth, email, password);

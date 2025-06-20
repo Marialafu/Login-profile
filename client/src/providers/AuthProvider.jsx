@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const [formValues, setFormValues] = useState(null);
 
 	useEffect(() => {
 		const unsuscribe = auth.onAuthStateChanged(user => {
@@ -18,6 +19,10 @@ const AuthProvider = ({ children }) => {
 
 		return () => unsuscribe();
 	});
+
+	if (formValues) {
+		console.log(formValues);
+	}
 
 	return (
 		<AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>

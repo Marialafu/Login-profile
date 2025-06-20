@@ -1,9 +1,13 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 const Profile = () => {
 	const { user } = useContext(AuthContext);
 	const [isEditing, setIsEditing] = useState(false);
+
+	//alternativa de navigate, se pone el componente por que no puedes retornar una función.
+	if (!user) return <Navigate to={'/'} />;
 	return (
 		<>
 			{!isEditing && (
