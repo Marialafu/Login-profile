@@ -13,18 +13,21 @@ usersController.getAllUsers = async (req, res) => {
 };
 
 usersController.createUsers = async (req, res) => {
-  const { info } = req.body;
-  if (!info) return res.status(400).send({ error: 'Bad request' + error });
+  const {firebaseId, name, email} = req.body
+  if (!firebaseId) return res.status(400).send({ error: 'Bad request'});
+  if (!name || !email) return res.status(400).send({error: 'No user data'})
 
   try {
-    const users = await UsersModel.findById(req.params.id);
-
-    if (users) return res.status(409).send({ error: 'User exists' });
+    //const users = await UsersModel.findById(req.params.id);
+    //if (users) return res.status(409).send({ error: 'User exists' });
 
     const newUsers = new UsersModel({
       _id: v4(),
-      info
+      firebaseId: firebaseId,
+      name: name,
+      email: email
     });
+    console.log(newUsers)
 
     await newUsers.save();
 
@@ -64,7 +67,7 @@ usersController.deleteUser = async (req, res) => {
     await UsersModel.deleteOne({ _id: id });
     const allUsers = await UsersModel.find();
 
-    return res.send(200).send(allUsers);
+    return res.status(200).send(allUsers);
   } catch (error) {
     return res.status(500).send({ error: 'Error reading database' + error });
   }

@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     //required: para valores obligatorios
     //type: String, Number, Boolean, Arrays...
+    firebaseId: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true }
   },
