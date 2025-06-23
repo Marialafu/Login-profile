@@ -9,6 +9,8 @@ const AuthProvider = ({ children }) => {
 	const [formValues, setFormValues] = useState(null);
 	const [finalUser, setFinalUser] = useState(null);
 
+	console.log(formValues);
+
 	useEffect(() => {
 		const unsuscribe = auth.onAuthStateChanged(user => {
 			if (user) {
@@ -17,6 +19,7 @@ const AuthProvider = ({ children }) => {
 			} else {
 				console.log('Usuario NO autentificado');
 				setUser(null);
+				setFormValues(null);
 			}
 		}, []);
 
@@ -31,6 +34,7 @@ const AuthProvider = ({ children }) => {
 
 			try {
 				createUser(defineMongoUser);
+				console.log(`Creado en mongo: ${JSON.stringify(defineMongoUser)}`);
 			} catch (error) {
 				console.log(error);
 			}

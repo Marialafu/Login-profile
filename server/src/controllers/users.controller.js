@@ -13,6 +13,7 @@ usersController.getAllUsers = async (req, res) => {
 };
 
 usersController.createUsers = async (req, res) => {
+  console.log(req.body);
   
   const {firebaseId, name, email} = req.body
   if (!firebaseId) return res.status(400).send({ error: 'No id'});
