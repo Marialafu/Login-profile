@@ -13,16 +13,14 @@ usersController.getAllUsers = async (req, res) => {
 };
 
 usersController.createUsers = async (req, res) => {
+  
   const {firebaseId, name, email} = req.body
-  if (!firebaseId) return res.status(400).send({ error: 'Bad request'});
+  if (!firebaseId) return res.status(400).send({ error: 'No id'});
   if (!name || !email) return res.status(400).send({error: 'No user data'})
 
   try {
-    //const users = await UsersModel.findById(req.params.id);
-    //if (users) return res.status(409).send({ error: 'User exists' });
 
     const newUsers = new UsersModel({
-      _id: v4(),
       firebaseId: firebaseId,
       name: name,
       email: email
@@ -34,6 +32,7 @@ usersController.createUsers = async (req, res) => {
     const allUsers = await UsersModel.find();
     return res.status(200).send(allUsers);
   } catch (error) {
+    console.error('❌ Error en createUsers:', error.name, error.message, error.stack);
     return res.status(500).send({ error: 'Error reading database' + error });
   }
 };

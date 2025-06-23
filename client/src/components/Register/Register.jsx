@@ -53,29 +53,26 @@ const Register = () => {
 
 //siempre que le doy a google me deja entrar bien. aunque ya me haga registrado con eso. Si registro normal, y luego me meto con google también me deja. Coge el mismo usuario.
 const signInWithGoogle = async (setUser, setFormValues, navigate) => {
-	signInWithPopup(auth, provider)
-		.then(result => {
-			// result recibe el resultado de la función anterior
-			const credential = GoogleAuthProvider.credentialFromResult(result);
-			const token = credential.accessToken;
-			// The signed-in user info.
-			const user = result.user;
-			setUser(user);
-			console.log('usuario conectado por google');
-			setFormValues({ email: user.email, name: user.displayName });
-			navigate('/');
-			// IdP data available using getAdditionalUserInfo(result)
-		})
-		.catch(error => {
-			// Handle Errors here.
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// The email of the user's account used.
-			const email = error?.customData?.email;
-			// The AuthCredential type that was used.
-			const credential = GoogleAuthProvider.credentialFromError(error);
-			// ...
-		});
+	try {
+		const result = await signInWithPopup(auth, provider);
+		const credential = GoogleAuthProvider.credentialFromResult(result);
+		const token = credential.accessToken;
+		// The signed-in user info.
+		const user = result.user;
+		setUser(user);
+		console.log('usuario conectado por google');
+		setFormValues({ email: user.email, name: user.displayName });
+		navigate('/');
+		// IdP data available using getAdditionalUserInfo(result)
+	} catch (error) {
+		console.error('Error al iniciar sesión con Google:', error.message);
+		const errorCode = error.code;
+		const errorMessage = error.message;
+		// The email of the user's account used.
+		const email = error?.customData?.email;
+		// The AuthCredential type that was used.
+		const credential = GoogleAuthProvider.credentialFromError(error);
+	}
 };
 
 const sendForm = async (event, navigate, setError, setFormValues) => {
@@ -85,10 +82,9 @@ const sendForm = async (event, navigate, setError, setFormValues) => {
 	const password = formData.password.value;
 	const name = formData.name.value;
 
-	setFormValues({ email: email, name: name });
-
 	try {
 		await createUserWithEmailAndPassword(auth, email, password);
+		setFormValues({ email: email, name: name });
 		navigate('/');
 	} catch (err) {
 		//conseguir que salga el error concreto

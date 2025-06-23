@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react';
 import { auth } from '../lib/config/firebase.config';
 import { AuthContext } from '../contexts/AuthContext';
 import { createUser } from '../lib/utils/api.users';
+import { logEvent } from 'firebase/analytics';
 
 const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [formValues, setFormValues] = useState(null);
-	const [userCreatedInMongo, setUserCreatedInMongo] = useState(false);
-
-	console.log(user);
-	console.log(formValues);
+	const [finalUser, setFinalUser] = useState(null);
 
 	useEffect(() => {
 		const unsuscribe = auth.onAuthStateChanged(user => {
@@ -26,21 +24,21 @@ const AuthProvider = ({ children }) => {
 	});
 
 	useEffect(() => {
-		if (formValues && user && !userCreatedInMongo) {
+		if (formValues && user) {
 			const defineMongoUser = { firebaseId: user.uid, ...formValues };
-			console.log(`Enviado a mongo: ${defineMongoUser}`);
+			setFinalUser(defineMongoUser);
+			console.log(`Enviado a mongo: ${JSON.stringify(defineMongoUser)}`);
 
 			try {
 				createUser(defineMongoUser);
-				setUserCreatedInMongo(true);
 			} catch (error) {
 				console.log(error);
 			}
 		}
-	}, [formValues, user, userCreatedInMongo]);
+	}, [user]);
 
 	return (
-		<AuthContext.Provider value={{ user, setFormValues, setUser }}>
+		<AuthContext.Provider value={{ user, setFormValues, setUser, finalUser }}>
 			{children}
 		</AuthContext.Provider>
 	);

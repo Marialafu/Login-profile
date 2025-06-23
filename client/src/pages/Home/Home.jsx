@@ -6,8 +6,8 @@ import { auth } from '../../lib/config/firebase.config';
 import { signOut } from 'firebase/auth';
 
 const Home = () => {
-	const { user } = useContext(AuthContext);
-	const name = user?.email?.toUpperCase();
+	const { user, finalUser } = useContext(AuthContext);
+	const name = finalUser?.name?.toUpperCase();
 	const navigate = useNavigate();
 
 	return (
