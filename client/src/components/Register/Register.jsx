@@ -1,10 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-	createUserWithEmailAndPassword,
-	GoogleAuthProvider,
-	signInWithPopup
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../lib/config/firebase.config';
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -55,23 +51,29 @@ const Register = () => {
 const signInWithGoogle = async (setUser, setFormValues, navigate) => {
 	try {
 		const result = await signInWithPopup(auth, provider);
-		const credential = GoogleAuthProvider.credentialFromResult(result);
-		const token = credential.accessToken;
+		//un metodo de autenticacion
+		//const credential = GoogleAuthProvider.credentialFromResult(result);
+		//código de identificacion encriptado, para llave digital
+		//const token = credential.accessToken;
 		// The signed-in user info.
 		const user = result.user;
 		setUser(user);
 		console.log('usuario conectado por google');
-		setFormValues({ email: user.email, name: user.displayName });
+		setFormValues({
+			email: user.email,
+			name: user.displayName,
+			provider: 'google'
+		});
 		navigate('/');
 		// IdP data available using getAdditionalUserInfo(result)
 	} catch (error) {
 		console.error('Error al iniciar sesión con Google:', error.message);
-		const errorCode = error.code;
-		const errorMessage = error.message;
-		// The email of the user's account used.
-		const email = error?.customData?.email;
-		// The AuthCredential type that was used.
-		const credential = GoogleAuthProvider.credentialFromError(error);
+		// const errorCode = error.code;
+		// const errorMessage = error.message;
+		// // The email of the user's account used.
+		// const email = error?.customData?.email;
+		// // The AuthCredential type that was used.
+		// const credential = GoogleAuthProvider.credentialFromError(error);
 	}
 };
 
@@ -84,7 +86,7 @@ const sendForm = async (event, navigate, setError, setFormValues) => {
 
 	try {
 		await createUserWithEmailAndPassword(auth, email, password);
-		setFormValues({ email: email, name: name });
+		setFormValues({ email: email, name: name, provider: 'email' });
 		navigate('/');
 	} catch (err) {
 		//conseguir que salga el error concreto

@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema(
     //type: String, Number, Boolean, Arrays...
     firebaseId: { type: String, required: true },
     name: { type: String, required: true },
-    email: { type: String, required: true }
+    email: { type: String, required: true },
+    provider: String
   },
   {
     //genera createAt y UpdateAt automático
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema(
 );
 
 //js no sabe leer el esquema, el modelo compila el esquema
+//es lo que te permita interactuar con la base de datos de mongo.
 const UserModel = mongoose.model('User', userSchema);
 
 module.exports = UserModel;

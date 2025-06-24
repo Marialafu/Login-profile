@@ -14,26 +14,37 @@ usersController.getAllUsers = async (req, res) => {
 
 usersController.createUsers = async (req, res) => {
   console.log(req.body);
-  
-  const {firebaseId, name, email} = req.body
-  if (!firebaseId) return res.status(400).send({ error: 'No id'});
-  if (!name || !email) return res.status(400).send({error: 'No user data'})
+
+  const { firebaseId, name, email, provider } = req.body;
+  if (!firebaseId) return res.status(400).send({ error: 'No id' });
+  if (!name || !email) return res.status(400).send({ error: 'No user data' });
 
   try {
-
-    const newUsers = new UsersModel({
-      firebaseId: firebaseId,
-      name: name,
-      email: email
+    //si el valor y el campo es el mismo no hace falta poner name: name
+    const newUser = new UsersModel({
+      firebaseId,
+      name,
+      email,
+      provider
     });
-    console.log(newUsers)
+    console.log(newUser);
 
-    await newUsers.save();
-
+    //coge todos los usuarios de mongo gracias al model.
     const allUsers = await UsersModel.find();
+
+    if (newUser.provider === 'google') {
+      const mongoUser = allUsers.find(user => user.email === newUser.email);
+      if (!mongoUser) await newUser.save();
+    }
+
     return res.status(200).send(allUsers);
   } catch (error) {
-    console.error('❌ Error en createUsers:', error.name, error.message, error.stack);
+    console.error(
+      '❌ Error en createUsers:',
+      error.name,
+      error.message,
+      error.stack
+    );
     return res.status(500).send({ error: 'Error reading database' + error });
   }
 };

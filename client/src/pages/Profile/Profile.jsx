@@ -3,7 +3,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 const Profile = () => {
-	const { user } = useContext(AuthContext);
+	const { user, finalUser } = useContext(AuthContext);
 	const [isEditing, setIsEditing] = useState(false);
 
 	//alternativa de navigate, se pone el componente por que no puedes retornar una función.
@@ -14,8 +14,8 @@ const Profile = () => {
 				<>
 					<h2>Your profile</h2>
 					<div>
-						<p>nombre: {user.uid}</p>
-						<p>correo: {user.email}</p>
+						<p>nombre: {finalUser.name}</p>
+						<p>correo: {finalUser.email}</p>
 					</div>
 					<div>
 						<button onClick={() => setIsEditing(true)}>Editar datos</button>
@@ -28,11 +28,11 @@ const Profile = () => {
 					<div>
 						<div>
 							<label>NAME</label>
-							<input name='name' type='text' defaultValue={user.uid} />
+							<input name='name' type='text' defaultValue={finalUser.name} />
 						</div>
 						<div>
 							<label>EMAIL</label>
-							<input name='email' type='text' defaultValue={user.email} />
+							<input name='email' type='text' defaultValue={finalUser.email} />
 						</div>
 						<a href=''>Cambiar contraseña</a>
 					</div>
